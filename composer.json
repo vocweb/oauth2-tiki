@@ -19,13 +19,6 @@
             "Tiki\\Oauth2\\Client\\": "src/"
         }
     },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Tiki\\OAuth2\\Client\\Providers\\TikiAuthProvider"
-            ]
-        }
-    },
     "authors": [
         {
             "name": "Tien Chu",
