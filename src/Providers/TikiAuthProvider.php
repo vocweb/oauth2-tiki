@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Tiki\OAuth2\Client\Providers;
+namespace Vocweb\Oauth2Tiki\Providers;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
-use Tiki\OAuth2\Client\Grants\TikiAuthorizationCodeGrant;
-use Tiki\OAuth2\Client\Grants\TikiRefreshTokenGrant;
+use Vocweb\Oauth2Tiki\Grants\TikiAuthorizationCodeGrant;
+use Vocweb\Oauth2Tiki\Grants\TikiRefreshTokenGrant;
 
 class TikiAuthProvider extends AbstractProvider
 {

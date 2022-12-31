@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tiki\OAuth2\Client\Grants;
+namespace Vocweb\Oauth2Tiki\Grants;
 
 use League\OAuth2\Client\Grant\AbstractGrant;
 

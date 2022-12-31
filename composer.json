@@ -4,7 +4,8 @@
     "type": "library",
     "require": {
         "php": "^7.4|^8.0",
-        "league/oauth2-client": "^2.6"
+        "league/oauth2-client": "^2.6",
+        "illuminate/support": "^9.45"
     },
     "license": "MIT",
     "keywords": [
@@ -16,7 +17,14 @@
     ],
     "autoload": {
         "psr-4": {
-            "Tiki\\Oauth2\\Client\\": "src/"
+            "Vocweb\\Oauth2Tiki\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Vocweb\\Oauth2Tiki\\Oauth2TikiServiceProvider"
+            ]
         }
     },
     "authors": [
