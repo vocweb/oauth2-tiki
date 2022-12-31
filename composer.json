@@ -22,7 +22,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Tiki\\OAuth2\\Client\\Providers"
+                "Tiki\\OAuth2\\Client\\Providers\\TikiAuthProvider"
             ]
         }
     },
