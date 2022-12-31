@@ -1,6 +1,6 @@
 <?php
 
-namespace Tiki\OAuth2\Client\Providers;
+namespace Vocweb\Oauth2Tiki\Providers;
 
 use League\OAuth2\Client\OptionProvider\OptionProviderInterface;
 

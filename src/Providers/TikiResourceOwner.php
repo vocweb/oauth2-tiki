@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tiki\OAuth2\Client\Providers;
+namespace Vocweb\Oauth2Tiki\Providers;
 
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 

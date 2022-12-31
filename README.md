@@ -18,7 +18,7 @@ $ composer require vocweb/oauth2-tiki
 ```php 
 <?php 
 
-use Tiki\OAuth2\Client\Providers\TikiAuthProvider;
+use Vocweb\Oauth2Tiki\Providers\TikiAuthProvider;
 
 $provider = new TikiAuthProvider([
     'clientId' => 'xyz',
@@ -70,7 +70,7 @@ if (!isset($_GET['code'])) {
 ```php 
 <?php
  
-use Tiki\OAuth2\Client\Providers\TikiAuthProvider;
+use Vocweb\Oauth2Tiki\Providers\TikiAuthProvider;
 
 $provider = new TikiAuthProvider([
     'clientId' => 'xyz',
