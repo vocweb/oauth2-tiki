@@ -16,13 +16,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Vocweb\\Oauth2\\Client\\": "src/"
+            "Tiki\\Oauth2\\Client\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Vocweb\\OAuth2TikiServiceProvider"
+                "Tiki\\OAuth2\\Client\\Providers"
             ]
         }
     },
