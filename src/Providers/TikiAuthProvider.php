@@ -8,12 +8,15 @@ use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
+use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 use Vocweb\Oauth2Tiki\Grants\TikiAuthorizationCodeGrant;
 use Vocweb\Oauth2Tiki\Grants\TikiRefreshTokenGrant;
 
 class TikiAuthProvider extends AbstractProvider
 {
+	use BearerAuthorizationTrait;
+
 	/**
 	 * Default host
 	 */
@@ -67,8 +70,11 @@ class TikiAuthProvider extends AbstractProvider
 
 	protected function prepareAccessTokenResponse(array $result): array
 	{
-		$result['data']['resource_owner_id'] = $result['data']['open_id'];
+		if (!isset($result['data'])) {
+			throw new \Exception(__METHOD__ . 'Missing part data of array, with message: ' . print_r($result, true));
+		}
 
+		$result['data']['resource_owner_id'] = $result['data']['open_id'];
 		return $result['data'];
 	}
 
