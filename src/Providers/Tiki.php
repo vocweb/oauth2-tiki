@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Vocweb\Oauth2Tiki\Providers;
 
 use League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider;
+use League\OAuth2\Client\OptionProvider\PostAuthOptionProvider;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
@@ -46,7 +47,8 @@ class Tiki extends AbstractProvider
 		$this->getGrantFactory()->setGrant('authorization_code', new TikiAuthorizationCodeGrant());
 		$this->getGrantFactory()->setGrant('refresh_token', new TikiRefreshTokenGrant());
 		// $this->setOptionProvider(new TikiOptionProvider());
-		$this->setOptionProvider(new HttpBasicAuthOptionProvider());
+		// $this->setOptionProvider(new HttpBasicAuthOptionProvider());
+		$this->setOptionProvider(new PostAuthOptionProvider());
 	}
 
 	/**
