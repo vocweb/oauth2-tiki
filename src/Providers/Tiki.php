@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Vocweb\Oauth2Tiki\Providers;
 
+use League\OAuth2\Client\OptionProvider\HttpBasicAuthOptionProvider;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
@@ -13,14 +14,30 @@ use Psr\Http\Message\ResponseInterface;
 use Vocweb\Oauth2Tiki\Grants\TikiAuthorizationCodeGrant;
 use Vocweb\Oauth2Tiki\Grants\TikiRefreshTokenGrant;
 
-class TikiAuthProvider extends AbstractProvider
+class Tiki extends AbstractProvider
 {
 	use BearerAuthorizationTrait;
 
 	/**
 	 * Default host
 	 */
-	protected string $host = 'https://api.tiki.vn';
+	protected $host = 'https://api.tiki.vn';
+
+	/**
+	 * Api authenticate endpoint
+	 * Doc: https://open.tiki.vn/docs/docs/current/getting-started/overview/#configurations
+	 *
+	 * @var string
+	 */
+	public $apiAuthEndPoint = 'https://api.tiki.vn/sc/oauth2/auth';
+
+	/**
+	 * Api token endpoint
+	 * Doc: https://open.tiki.vn/docs/docs/current/getting-started/overview/#configurations
+	 *
+	 * @var string
+	 */
+	public $apiTokenEndPoint = 'https://api.tiki.vn/sc/oauth2/token';
 
 	public function __construct(array $options = [], array $collaborators = [])
 	{
@@ -28,30 +45,39 @@ class TikiAuthProvider extends AbstractProvider
 
 		$this->getGrantFactory()->setGrant('authorization_code', new TikiAuthorizationCodeGrant());
 		$this->getGrantFactory()->setGrant('refresh_token', new TikiRefreshTokenGrant());
-		$this->setOptionProvider(new TikiOptionProvider());
+		// $this->setOptionProvider(new TikiOptionProvider());
+		$this->setOptionProvider(new HttpBasicAuthOptionProvider());
 	}
 
 	/**
 	 * Get authorization url to start the oauth-flow
+	 *
+	 * @return string
 	 */
 	public function getBaseAuthorizationUrl(): string
 	{
-		return 'https://api.tiki.vn/sc/oauth2/auth';
+		return $this->apiAuthEndPoint;
 	}
 
+	/**
+	 * Get access token url to retrieve token
+	 *
+	 * @param array $params
+	 * @return string
+	 */
 	public function getBaseAccessTokenUrl(array $params): string
 	{
-		return 'https://api.tiki.vn/sc/oauth2/token';
+		return $this->apiTokenEndPoint;
 	}
 
 	public function getAccessTokenUrl(array $params): string
 	{
 		if ($params['grant_type'] === 'refresh_token') {
 			// Refresh token requires calling a different URL
-			return 'https://api.tiki.vn/sc/oauth2/token';
+			return $this->apiTokenEndPoint;
 		}
 
-		return 'https://api.tiki.vn/sc/oauth2/token';
+		return $this->apiTokenEndPoint;
 	}
 
 	/**
@@ -70,13 +96,10 @@ class TikiAuthProvider extends AbstractProvider
 
 	protected function prepareAccessTokenResponse(array $result): array
 	{
-		if (!isset($result['data'])) {
-			throw new \Exception(__METHOD__ . 'Missing part data of array, with message: ' . print_r($result, true));
-		}
-
 		$result['data']['resource_owner_id'] = $result['data']['open_id'];
 		return $result['data'];
 	}
+
 
 	/**
 	 * @param null|AccessToken $token
@@ -89,6 +112,12 @@ class TikiAuthProvider extends AbstractProvider
 
 	/**
 	 * Get provider URl to fetch the user info.
+	 */
+	/**
+	 * Get provider url to fetch user details
+	 *
+	 * @param AccessToken $token
+	 * @return string
 	 */
 	public function getResourceOwnerDetailsUrl(AccessToken $token): string
 	{
@@ -137,6 +166,14 @@ class TikiAuthProvider extends AbstractProvider
 	 */
 	public function checkResponse(ResponseInterface $response, $data): void
 	{
+		if (isset($data['error']) && $data['error_description']) {
+			throw new IdentityProviderException(
+				$data['error'] . ";\n\r " . $data['error_description'],
+				$data['status_code'],
+				$data
+			);
+		}
+
 		if (isset($data['error']['code']) && $data['error']['code']) {
 			throw new IdentityProviderException(
 				$data['error']['message'],
@@ -167,6 +204,14 @@ class TikiAuthProvider extends AbstractProvider
 		return new TikiResourceOwner($response);
 	}
 
+	/**
+	 * Get the default scopes used by this provider.
+	 *
+	 * This should not be a complete list of all scopes, but the minimum
+	 * required for the provider user interface!
+	 *
+	 * @return array
+	 */
 	public function getDefaultScopes(): array
 	{
 		return [
