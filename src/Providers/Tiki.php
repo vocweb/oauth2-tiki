@@ -47,8 +47,8 @@ class Tiki extends AbstractProvider
 		$this->getGrantFactory()->setGrant('authorization_code', new TikiAuthorizationCodeGrant());
 		$this->getGrantFactory()->setGrant('refresh_token', new TikiRefreshTokenGrant());
 		// $this->setOptionProvider(new TikiOptionProvider());
-		// $this->setOptionProvider(new HttpBasicAuthOptionProvider());
-		$this->setOptionProvider(new PostAuthOptionProvider());
+		$this->setOptionProvider(new HttpBasicAuthOptionProvider());
+		// $this->setOptionProvider(new PostAuthOptionProvider());
 	}
 
 	/**
@@ -107,10 +107,10 @@ class Tiki extends AbstractProvider
 	 * @param null|AccessToken $token
 	 * @return string[]
 	 */
-	protected function getAuthorizationHeaders($token = null): array
-	{
-		return ['Authorization' => 'Bearer ' . $token->getToken()];
-	}
+	// protected function getAuthorizationHeaders($token = null): array
+	// {
+	// 	return ['Authorization' => 'Bearer ' . $token->getToken()];
+	// }
 
 	/**
 	 * Get provider URl to fetch the user info.
@@ -169,8 +169,12 @@ class Tiki extends AbstractProvider
 	public function checkResponse(ResponseInterface $response, $data): void
 	{
 		if (isset($data['error']) && $data['error_description']) {
+			$err = $data['error'] . ";\n\r " . $data['error_description'];
+			if (isset($data['error_hint']) && $data['error_hint']) {
+				$err .= ";\n\r " . $data['error_hint'];
+			}
 			throw new IdentityProviderException(
-				$data['error'] . ";\n\r " . $data['error_description'],
+				$err,
 				$data['status_code'],
 				$data
 			);
