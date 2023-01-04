@@ -20,6 +20,12 @@ class Tiki extends AbstractProvider
 	use BearerAuthorizationTrait;
 
 	/**
+	 * Name of the resource owner identifier field that is
+	 * present in the access token response (if applicable)
+	 */
+	const ACCESS_TOKEN_RESOURCE_OWNER_ID = null;
+
+	/**
 	 * Default host
 	 */
 	protected $host = 'https://api.tiki.vn';
@@ -96,11 +102,11 @@ class Tiki extends AbstractProvider
 		return $options;
 	}
 
-	protected function prepareAccessTokenResponse(array $result): array
-	{
-		$result['data']['resource_owner_id'] = $result['data']['open_id'];
-		return $result['data'];
-	}
+	// protected function prepareAccessTokenResponse(array $result): array
+	// {
+	// 	$result['data']['resource_owner_id'] = $result['data']['open_id'];
+	// 	return $result['data'];
+	// }
 
 
 	/**
