@@ -221,10 +221,7 @@ class Tiki extends AbstractProvider
 	public function getDefaultScopes(): array
 	{
 		return [
-			'order',
-			'product',
-			'inventory',
-			'offline',
+			'order product inventory offline',
 		];
 	}
 }
